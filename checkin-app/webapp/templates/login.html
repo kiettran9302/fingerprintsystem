@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+<!--head-->
+{% block head %}
+<title>Login</title>
+{% endblock %}
+
+<!--body-->
+{% block body %}
+<div class="flex-container">
+    <div class="content-container">
+      <div class="form-container">
+        <form method="POST">
+          <h2>
+            Login
+          </h2>
+          <br>
+          <br>
+          <span class="subtitle">USERNAME:</span>
+          <br>
+          <input type="text" name="usrname" value="" required>
+          <br>
+          <span class="subtitle">PASSWORD:</span>
+          <br>
+          <input type="password" name="pswd" value="" required>
+          <br><br>
+          <input type="submit" value="LOGIN" class="submit-btn">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

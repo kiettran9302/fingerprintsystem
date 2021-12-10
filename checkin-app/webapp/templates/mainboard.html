@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+<!--head-->
+{% block head %}
+<title>Mainboard</title>
+<script src="https://unpkg.com/mqtt@4.2.8/dist/mqtt.min.js"></script>
+<script>
+    const MQTT_SERVER = "172.16.2.129"
+    const MQTT_SERVER_PORT = 9001
+    const client_id = "enduser-1";
+    const MQTT_SUB_TOPICS = [
+        "/webserver/checkin/db",
+    ]
+    const options = {
+        clientId: client_id,
+        clean: true
+    }
+
+    //handle incoming message
+    function mqtt_message_handler(topic, message, packet)
+    {
+        if (topic == MQTT_SUB_TOPICS[0]) {
+            console.log(message.toString());
+            decoded_message = JSON.parse(message);
+            show_student_checkin_status(decoded_message);
+        }
+    }
+
+    //handle incoming connect
+    function mqtt_connect_handler()
+    {
+        console.log("user mqtt connected  " + mqtt_client.connected);
+    }
+
+    //handle error
+    function mqtt_error_handler()
+    {
+        console.log("Can't connect to broker" + error);
+    }
+
+    function show_student_checkin_status(decoded_message)
+    {
+        //del previous rows
+        document.getElementById("table-body-student").innerHTML = "";
+        //add row elements
+        let text = "";
+        decoded_message.forEach(function(student) {
+                text += 
+                `<tr>\
+                <th scope='row'>${student['id']}</th>\
+                <td>${student['student_id']}</td>\
+                <td>${student['student_lname']}</td>\
+                <td>${student['student_fname']}</td>\
+                `;
+                
+                if (student['checkin_status'] == 'YES') {
+                    text += `<td class='text-info'>${student['checkin_status']}</td></tr>`;
+                }
+                
+                else {
+                    text += `<td class='text-warning'>${student['checkin_status']}</td></tr>`;
+                }
+            }
+        );
+        document.getElementById("table-body-student").innerHTML = text;
+    }
+</script>
+{% endblock %}
+
+<!--body-->
+{% block body %}
+<script>
+    mqtt_client = mqtt.connect("ws://" + MQTT_SERVER + ":" + MQTT_SERVER_PORT.toString() + "/mqtt", options);
+    MQTT_SUB_TOPICS.forEach(topic => {
+        mqtt_client.subscribe(topic);
+    });
+    mqtt_client.on('connect', mqtt_connect_handler);
+    mqtt_client.on('message', mqtt_message_handler);
+    mqtt_client.on('error', mqtt_error_handler);
+</script>
+
+<div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic outlined example">
+  <a href="/logout" class="btn btn-outline-secondary">Logout</a>
+</div>
+
+<table class="table table-dark table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Student ID</th>
+      <th scope="col">First name</th>
+      <th scope="col">Last name</th>
+      <th scope="col">Checkin status</th>
+    </tr>
+  </thead>
+  
+  <tbody id="table-body-student">
+  </tbody>
+</table>
+
+{% endblock %}
