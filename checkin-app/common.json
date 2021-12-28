@@ -1,7 +1,8 @@
 {
     "MQTT_SERVER": {
         "ADDR": "localhost",
-        "PORT": 1883
+        "PORT": 1883,
+        "CLIENT_PORT": 9001
     },
 
     "WEB_SERVER" : {

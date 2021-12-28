@@ -56,7 +56,7 @@ def logout():
 @app.route('/mainboard', methods=['POST', 'GET'])
 def mainboard():
     if 'user_id' in session:
-        return render_template('mainboard.html')
+        return render_template('mainboard.html', mqtt_server = MQTT_SERVER, client_port = MQTT_CLIENT_PORT)
     else:
         return redirect(url_for('login'))
 
@@ -64,6 +64,7 @@ def mainboard():
 '''===================MQTT_HANDLER================='''
 MQTT_SERVER = common["MQTT_SERVER"]["ADDR"]
 MQTT_SERVER_PORT = common["MQTT_SERVER"]["PORT"]
+MQTT_CLIENT_PORT = common["MQTT_SERVER"]["CLIENT_PORT"]
 MQTT_SUB_TOPICS = [
     '/dev/checkin',
 ]

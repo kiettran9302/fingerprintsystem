@@ -5,8 +5,8 @@
 <title>Mainboard</title>
 <script src="https://unpkg.com/mqtt@4.2.8/dist/mqtt.min.js"></script>
 <script>
-    const MQTT_SERVER = "172.16.2.129"
-    const MQTT_SERVER_PORT = 9001
+    const MQTT_SERVER = {{mqtt_server}}
+    const MQTT_SERVER_PORT = {{client_port}}
     const client_id = "enduser-1";
     const MQTT_SUB_TOPICS = [
         "/webserver/checkin/db",
