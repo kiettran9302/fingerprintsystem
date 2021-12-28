@@ -6,8 +6,11 @@ import datetime
 #MQTT connection
 import paho.mqtt.client as mqtt
 
-MQTT_SERVER = "localhost"
-MQTT_SERVER_PORT = 1883
+with open('./../common.json') as f:
+    common = json.load(f)
+
+MQTT_SERVER = common["MQTT_SERVER"]["ADDR"]
+MQTT_SERVER_PORT = common["MQTT_SERVER"]["PORT"]
 MQTT_SUB_TOPICS = [
     '/webserver/checkin/student'
 ]

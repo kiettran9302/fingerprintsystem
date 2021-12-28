@@ -7,12 +7,18 @@ import sys
 sys.path.insert(0, '../db')
 import db_access
 
+with open('./../common.json') as f:
+    common = json.load(f)
+
 '''===================DB================='''
 db_inst = db_access.DB('../db/checkindb.db')
 
 '''===================WEB_HANDLER================='''
 app = Flask(__name__)
-app.secret_key = 'checkinapponlyforteacherauthorization'
+app.secret_key = common["WEB_SERVER"]["APP_SECRET_KEY"]
+
+WEB_SERVER_ADDR = common["WEB_SERVER"]["ADDR"]
+WEB_SERVER_PORT = common["WEB_SERVER"]["PORT"]
 
 #index page
 @app.route('/')
@@ -56,8 +62,8 @@ def mainboard():
 
 
 '''===================MQTT_HANDLER================='''
-MQTT_SERVER = "localhost"
-MQTT_SERVER_PORT = 1883
+MQTT_SERVER = common["MQTT_SERVER"]["ADDR"]
+MQTT_SERVER_PORT = common["MQTT_SERVER"]["PORT"]
 MQTT_SUB_TOPICS = [
     '/dev/checkin',
 ]
@@ -97,4 +103,4 @@ def mqtt_run():
 
 if __name__ == "__main__":
     mqtt_run()
-    app.run(host='172.16.2.129', port='80')
+    app.run(host=WEB_SERVER_ADDR, port=WEB_SERVER_PORT)
