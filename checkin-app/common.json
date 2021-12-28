@@ -1,0 +1,13 @@
+{
+    "MQTT_SERVER": {
+        "ADDR": "localhost",
+        "PORT": 1883,
+        "CLIENT_PORT": 9001
+    },
+
+    "WEB_SERVER" : {
+        "ADDR": "localhost",
+        "PORT": 80,
+        "APP_SECRET_KEY": "checkinapponlyforteacherauthorization"
+    }
+}
